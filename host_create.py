@@ -1,9 +1,9 @@
 from zabbix_api import ZabbixAPI
 import csv
 
-URL = 'http://x.x.x.x/zabbix'
+URL = 'http://xxx.xxx.xx.x/zabbix'
 USERNAME = 'Admin'
-PASSWORD = 'senhazabbix'
+PASSWORD = 'zabbix'
 
 try:
     zapi = ZabbixAPI(URL, timeout=15)
@@ -36,7 +36,11 @@ def create_host(host, ip):
         create_host = zapi.host.create({
             "groups": groups,
             "host": host,
-            "templates": [{"templateid":"10001"}],
+            "templates": [{"templateid":"10186"}],
+            '''
+            Descomente caso utilize proxy
+            "proxy_hostid": "10320",
+            '''
             "interfaces": {
                 "type": info_interfaces['1']['id'],
                 "main": 1,
