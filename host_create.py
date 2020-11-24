@@ -1,9 +1,10 @@
 from zabbix_api import ZabbixAPI
 import csv
+import sys
 
-URL = 'http://xxx.xxx.xx.x/zabbix'
-USERNAME = 'Admin'
-PASSWORD = 'zabbix'
+URL = sys.argv[1]
+USERNAME = sys.argv[2]
+PASSWORD = sys.argv[3]
 
 try:
     zapi = ZabbixAPI(URL, timeout=15)
@@ -17,30 +18,17 @@ info_interfaces = {
     "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
-groupids = ['15']
+groupids = ['5']
 groups = [{"groupid": groupid} for groupid in groupids]
             
-'''
-interface = {
-    "type": info_interfaces['1']['id'],
-    "main": 1,
-    "useip": 1,
-    "ip": "192.168.33.50",
-    "dns": "",
-    "port": info_interfaces['1']['port']
-}
-'''
-
 def create_host(host, ip):
     try:
         create_host = zapi.host.create({
             "groups": groups,
             "host": host,
-            "templates": [{"templateid":"10186"}],
-            '''
-            Descomente caso utilize proxy
-            "proxy_hostid": "10320",
-            '''
+            "templates": [{"templateid":"10001"}],
+            #Descomente caso use proxy
+            #"proxy_hostid": "10320",
             "interfaces": {
                 "type": info_interfaces['1']['id'],
                 "main": 1,
