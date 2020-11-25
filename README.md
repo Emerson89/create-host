@@ -22,4 +22,4 @@ In the file hosts.csv insert the ips you want to register
 python3 host_create.py http://x.x.x.x/zabbix Admin zabbix
 ```
 ## License
-GLPv3
+GPLv3
