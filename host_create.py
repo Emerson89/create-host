@@ -5,6 +5,8 @@ import sys
 URL = sys.argv[1]
 USERNAME = sys.argv[2]
 PASSWORD = sys.argv[3]
+TEMPLATE = sys.argv[4]
+GROUP = sys.argv[5]
 
 try:
     zapi = ZabbixAPI(URL, timeout=15)
@@ -18,7 +20,7 @@ info_interfaces = {
     "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
-groupids = ['5']
+groupids = [GROUP]
 groups = [{"groupid": groupid} for groupid in groupids]
             
 def create_host(host, ip):
@@ -26,7 +28,7 @@ def create_host(host, ip):
         create_host = zapi.host.create({
             "groups": groups,
             "host": host,
-            "templates": [{"templateid":"10001"}],
+            "templates": [{"templateid":TEMPLATE}],
             #Descomente caso use proxy
             #"proxy_hostid": "10320",
             "interfaces": {
