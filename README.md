@@ -8,15 +8,13 @@
 
 ## Pattern:
 
-- If you use uncommon proxy in the script and enter the id
-
 # How to use
 
-In the file hosts.csv insert the ips you want to register
+In the file hosts.csv insert the ips you want to register follow the example
 
 ## Set access to the zabbix-server front
 ```
-python3 host_create.py http://x.x.x.x/zabbix Admin zabbix TEMPLATE-ID GROUP-ID
+python3 host_create.py http://x.x.x.x/zabbix Admin zabbix
 ```
 ## License
 GPLv3
