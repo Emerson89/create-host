@@ -1,6 +1,7 @@
-from zabbix_api import ZabbixAPI
+from zabbix_api import ZabbixAPI,Already_Exists
 import csv
 import sys
+import time
 
 URL = sys.argv[1]
 USERNAME = sys.argv[2]
@@ -14,36 +15,67 @@ try:
 except Exception as err:
     print(f'Falha ao conectar na API do zabbix, erro: {err}')
 
-print('Listando Templateids')
-print ()
-id = zapi.template.get({"output": "extend"})
-for x in id:
-    print (x['templateid'], "-", x['name'])
+def procurando_templates(nome_template):
+    id = zapi.template.get({
+        "output": ['name', 'templateid'],
+        "search": {"name": '*' + nome_template + '*'},
+        "searchWildcardsEnabled": True
+    })
+    if id:
+        print("***Templates encontrados***")
+        print()
+        for x in id:
+            print (x['templateid'], "-", x['name'])
+    else:
+        print("***Template não encontrado***")
+nome_template = input("Digite nome de um template não precisa ser completo: ")
+print()
+procurando_templates(nome_template)
 print()
 TEMPLATE = input("Insira o templateid...: ")
 print ()
-print('Listando groupsids...')
+def procurando_groupid(nome_group):
+    hostgroups = zapi.hostgroup.get({
+            "output": ['name','groupid'], 
+            "sortfield": "name",
+            "search": {"name": '*' + nome_group + '*'},
+            "searchWildcardsEnabled": True
+    })
+    if hostgroups:
+        print("***Groups encontrados***")
+        print()
+        for x in hostgroups:
+            print (x['groupid'], "-", x['name'])
+    else:
+        print("***Group não encontrado***")
+nome_group = input("Digite nome de um group não precisa ser completo: ")
 print()
-hostgroups = zapi.hostgroup.get({"output": "extend", "sortfield": "name"})
-for x in hostgroups:
-    print (x['groupid'], "-", x['name'])
+procurando_groupid(nome_group)
 print()
 GROUP = input("Insira o groupid...: ")
 print()
-print('Listando proxyids...')
-idproxy = zapi.proxy.get({"output": "extend", "selectInterface": "extend"})
+print('***Listando proxys***')
+print()
+idproxy = zapi.proxy.get({
+    "output": "extend", 
+    "sortfield": "host"
+    })
 for x in idproxy:
-    print (x['proxyid'], "-", x['description'])
+    print (x['proxyid'], "-", x['host'])
 print()
-PROXY = input("Insira o proxyid...: ")
+PROXY = input("Insira o proxyid caso não utilize utilize 0: ")
 print()
-print("Types de interfaces possíveis valores são: 1 - agent; 2 - SNMP ")
+print("***Tipos de interfaces possíveis: 1 - agent; 2 - SNMP***")
 print()
 TYPEID = input("Insira o typeid...: ")
+print()
+print('Aguarde...')
+time.sleep(2)
+print()
 
 info_interfaces = {
     "1": {"type": "agent", "id": "1", "port": "10050"},
-    "2": {"type": "SNMP", "id": "2", "port": "161"},
+    "4": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
 groupids = [GROUP]
@@ -65,12 +97,15 @@ def create_host(host, ip):
                 "port": info_interfaces[TYPEID]['port']
 }
         })
-        print()
         print(f'Host cadastrado {host}')
+    except Already_Exists:
+        print(f'Host(s) já cadastrado {host}')
     except Exception as err:
         print(f'Falha ao cadastrar {err}')
-    
+   
 with open('hosts.csv') as file:
     file_csv = csv.reader(file, delimiter=';')
     for [nome,ipaddress] in file_csv:
         create_host(host=nome,ip=ipaddress)
+
+zapi.logout()
