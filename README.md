@@ -10,6 +10,8 @@
 
 # How to use
 
+Lists the templates, groups and proxies, the proxy being optional if you don't use it, enter a value= 0
+
 In the file hosts.csv insert the ips you want to register follow the example
 
 ## Set access to the zabbix-server front
