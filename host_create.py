@@ -28,7 +28,7 @@ def procurando_templates(nome_template):
             print (x['templateid'], "-", x['name'])
     else:
         print("***Template não encontrado***")
-nome_template = input("Digite nome de um template não precisa ser completo: ")
+nome_template = input("Pesquise nome de um template não precisa ser completo: ")
 print()
 procurando_templates(nome_template)
 print()
@@ -48,7 +48,7 @@ def procurando_groupid(nome_group):
             print (x['groupid'], "-", x['name'])
     else:
         print("***Group não encontrado***")
-nome_group = input("Digite nome de um group não precisa ser completo: ")
+nome_group = input("Pesquise nome de um group não precisa ser completo: ")
 print()
 procurando_groupid(nome_group)
 print()
@@ -63,7 +63,7 @@ idproxy = zapi.proxy.get({
 for x in idproxy:
     print (x['proxyid'], "-", x['host'])
 print()
-PROXY = input("Insira o proxyid caso não utilize utilize 0: ")
+PROXY = input("Digite o proxyid caso não utilize insira 0: ")
 print()
 print("***Tipos de interfaces possíveis: 1 - agent; 2 - SNMP***")
 print()
