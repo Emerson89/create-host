@@ -4,8 +4,11 @@
 
 - Python3.8
 - zabbix_api
-- zabbix 4.4
 
+## Requirements
+```
+pip install -r requirements.txt
+```
 ## Pattern:
 
 # How to use
