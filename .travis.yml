@@ -2,7 +2,7 @@ language: python
 python:
   - "3.6"
 script:
-  - host_create.py
+  - host_create.py http://x.x.x.x/zabbix Admin zabbix
 
 after_script:
 notifications:
