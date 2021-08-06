@@ -1,6 +1,6 @@
 # Automatic host registration in zabbix using python and api-zabbix
 
-https://travis-ci.org/Emerson89/create-host.svg?branch=master
+[![Build Status](https://travis-ci.org/Emerson89/create-host.svg?branch=master)](https://travis-ci.org/Emerson89/create-host)
 
 ## Dependencies
 
