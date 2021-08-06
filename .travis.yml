@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.6"
+script:
+  - host_create.py
+
+after_script:
+notifications:
+  recipients:
+    - emerson.cesario50@gmail.com
