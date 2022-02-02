@@ -1,11 +1,14 @@
+#!/usr/bin/python3
+
 from zabbix_api import ZabbixAPI,Already_Exists
 import csv
 import sys
+import getpass
 import time
 
 URL = sys.argv[1]
 USERNAME = sys.argv[2]
-PASSWORD = sys.argv[3]
+PASSWORD = getpass.getpass("Digite a senha: ")
 
 try:
     zapi = ZabbixAPI(URL, timeout=15)
@@ -15,6 +18,7 @@ try:
 except Exception as err:
     print(f'Falha ao conectar na API do zabbix, erro: {err}')
 
+#Funçao procura templates
 def procurando_templates(nome_template):
     id = zapi.template.get({
         "output": ['name', 'templateid'],
@@ -24,14 +28,17 @@ def procurando_templates(nome_template):
     if id:
         print("***Templates encontrados***")
         print()
+        #Condicao se e for para procura templateid e nome
         for x in id:
             print (x['templateid'], "-", x['name'])
     else:
         print("***Template não encontrado***")
+#Input de entrada para pesquisa nome template
 nome_template = input("Pesquise nome de um template não precisa ser completo: ")
 print()
 procurando_templates(nome_template)
 print()
+#Variavel armazena o id do template
 TEMPLATE = input("Insira o templateid...: ")
 print ()
 def procurando_groupid(nome_group):
@@ -75,7 +82,7 @@ print()
 
 info_interfaces = {
     "1": {"type": "agent", "id": "1", "port": "10050"},
-    "4": {"type": "SNMP", "id": "2", "port": "161"},
+    "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
 groupids = [GROUP]
@@ -94,8 +101,13 @@ def create_host(host, ip):
                 "useip": 1,
                 "ip": ip,
                 "dns": "",
-                "port": info_interfaces[TYPEID]['port']
-}
+                "port": info_interfaces[TYPEID]['port'],
+                "details": { 
+                    "version": 2,
+                    "bulk": 1,
+                    "community": "{$SNMP_COMMUNITY}"
+                }
+           }
         })
         print(f'Host cadastrado {host}')
     except Already_Exists:
