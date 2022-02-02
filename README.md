@@ -19,6 +19,8 @@ Lists the templates, groups and proxies, the proxy being optional if you don't u
 
 In the file hosts.csv insert the ips you want to register follow the example
 
+NOME-hostname;IP-host-monit
+
 ## Set access to the zabbix-server front
 ```
 python3 host_create.py http://x.x.x.x/zabbix Admin zabbix

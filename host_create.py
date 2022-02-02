@@ -2,10 +2,11 @@ from zabbix_api import ZabbixAPI,Already_Exists
 import csv
 import sys
 import time
+import getpass
 
 URL = sys.argv[1]
 USERNAME = sys.argv[2]
-PASSWORD = sys.argv[3]
+PASSWORD = getpass.getpass("Digite a senha: ")
 
 try:
     zapi = ZabbixAPI(URL, timeout=15)
@@ -75,7 +76,7 @@ print()
 
 info_interfaces = {
     "1": {"type": "agent", "id": "1", "port": "10050"},
-    "4": {"type": "SNMP", "id": "2", "port": "161"},
+    "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
 groupids = [GROUP]
@@ -94,8 +95,13 @@ def create_host(host, ip):
                 "useip": 1,
                 "ip": ip,
                 "dns": "",
-                "port": info_interfaces[TYPEID]['port']
-}
+                "port": info_interfaces[TYPEID]['port'],
+                "details": {
+                    "version": 2,
+                    "bulk": 1,
+                    "community": "{$SNMP_COMMUNITY}"
+                }
+            }
         })
         print(f'Host cadastrado {host}')
     except Already_Exists:
