@@ -27,11 +27,11 @@ def procurando_templates(nome_template):
         "searchWildcardsEnabled": True
     })
     if id:
-        print("***Templates encontrados***")
+        print("***Template encontrados***")
         print()
         #Condicao se e for para procura templateid e nome
         for x in id:
-            print (x['templateid'], "-", x['name'])
+            print ("TemplateID: {} {} Nome: {}\n".format(x['templateid'],'-', x['name']))
     else:
         print("***Template não encontrado***")
 #Input de entrada para pesquisa nome template
@@ -53,7 +53,7 @@ def procurando_groupid(nome_group):
         print("***Groups encontrados***")
         print()
         for x in hostgroups:
-            print (x['groupid'], "-", x['name'])
+            print ("GroupID: {} {} Nome: {}\n".format(x['groupid'],'-', x['name']))
     else:
         print("***Group não encontrado***")
 nome_group = input("Pesquise nome de um group não precisa ser completo: ")
@@ -69,13 +69,15 @@ idproxy = zapi.proxy.get({
     "sortfield": "host"
     })
 for x in idproxy:
-    print (x['proxyid'], "-", x['host'])
+    print ("ProxyID: {} {} Nome: {}\n".format(x['proxyid'],'-', x['host']))
 print()
 PROXY = input("Digite o proxyid caso não utilize insira 0: ")
 print()
 print("***Tipos de interfaces possíveis: 1 - agent; 2 - SNMP***")
 print()
 TYPEID = input("Insira o typeid...: ")
+print()
+DESCRIPTION = input("Deseja inserir alguma descrição? Caso Não deixe em branco: ")
 print()
 print('Aguarde...')
 time.sleep(2)
@@ -89,11 +91,13 @@ info_interfaces = {
 groupids = [GROUP]
 groups = [{"groupid": groupid} for groupid in groupids]
             
-def create_host(host, ip):
+def create_host(nomes, host, ip):
     try:
         create_host = zapi.host.create({
             "groups": groups,
             "host": host,
+            "name": nomes,
+            "description": DESCRIPTION,
             "templates": [{"templateid":TEMPLATE}],
             "proxy_hostid": PROXY,
             "interfaces": {
@@ -118,7 +122,7 @@ def create_host(host, ip):
    
 with open('hosts.csv') as file:
     file_csv = csv.reader(file, delimiter=';')
-    for [nome,ipaddress] in file_csv:
-        create_host(host=nome,ip=ipaddress)
+    for [nome,hosts,ipaddress] in file_csv:
+        create_host(nomes=nome,host=hosts,ip=ipaddress)
 
 zapi.logout()
