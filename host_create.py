@@ -56,11 +56,31 @@ def procurando_groupid(nome_group):
             print ("GroupID: {} {} Nome: {}\n".format(x['groupid'],'-', x['name']))
     else:
         print("***Group não encontrado***")
-nome_group = input("Pesquise nome de um group não precisa ser completo: ")
 print()
-procurando_groupid(nome_group)
+while True:
+    nome_group = input("Pesquise nome de um group não precisa ser completo: ")
+    procurando_groupid(nome_group)
+    print("Deseja incluir \n1 - Pesquise \n2 - Sair")
+    opcao = input()
+    if opcao == "1":
+       NOMEGROUP = input("Digite o nome do grupo: ")
+       zapi.hostgroup.create({
+            "name": NOMEGROUP
+         })
+    break
+    #elif opcao == "3":
+    #    break
+   
+print()
 print()
 GROUP = input("Insira o groupid...: ")
+while True:
+    print("Deseja incluir mais algum grupo? \n1 - Sim \n2 - Nao")
+    opcao = input()
+    if opcao == "1":
+       GROUP2 = input("Insira o groupid...: ")
+    elif opcao == "2":
+        break
 print()
 print('***Listando proxys***')
 print()
@@ -88,7 +108,7 @@ info_interfaces = {
     "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
-groupids = [GROUP]
+groupids = [GROUP,GROUP2]
 groups = [{"groupid": groupid} for groupid in groupids]
             
 def create_host(nomes, host, ip):
