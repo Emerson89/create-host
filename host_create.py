@@ -5,6 +5,7 @@ import csv
 import sys
 import getpass
 import time
+import getpass
 
 URL = sys.argv[1]
 USERNAME = sys.argv[2]
@@ -102,12 +103,12 @@ def create_host(host, ip):
                 "ip": ip,
                 "dns": "",
                 "port": info_interfaces[TYPEID]['port'],
-                "details": { 
+                "details": {
                     "version": 2,
                     "bulk": 1,
                     "community": "{$SNMP_COMMUNITY}"
                 }
-           }
+            }
         })
         print(f'Host cadastrado {host}')
     except Already_Exists:
