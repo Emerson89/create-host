@@ -27,90 +27,70 @@ def procurando_templates(nome_template):
         "searchWildcardsEnabled": True
     })
     if id:
-        print("***Template encontrados***")
-        print()
+        print("\n***Template encontrados***")
         #Condicao se e for para procura templateid e nome
         for x in id:
             print ("TemplateID: {} {} Nome: {}\n".format(x['templateid'],'-', x['name']))
     else:
-        print("***Template não encontrado***")
+        print("\n***Template não encontrado***")
 #Input de entrada para pesquisa nome template
-nome_template = input("Pesquise nome de um template não precisa ser completo: ")
-print()
+nome_template = input("\nPesquise nome de um template não precisa ser completo: ")
 procurando_templates(nome_template)
-print()
 #Variavel armazena o id do template
-TEMPLATE = input("Insira o templateid...: ")
-print ()
-def procurando_groupid(nome_group):
+TEMPLATE = input("\nInsira o templateid...: ")
+
+while True:
+    print("\nDeseja criar um grupo de host? \n1 - Sim \n2 - Não")
+    opcao = input()
+    if opcao == "1":
+       NOMEGROUP = input("\nDigite o nome do grupo: ")
+       zapi.hostgroup.create({
+            "name": NOMEGROUP
+         })
+    elif opcao == "2":
+        break
+
+def procurando_groupid():
     hostgroups = zapi.hostgroup.get({
             "output": ['name','groupid'], 
             "sortfield": "name",
-            "search": {"name": '*' + nome_group + '*'},
-            "searchWildcardsEnabled": True
     })
     if hostgroups:
-        print("***Groups encontrados***")
+        print("\n***Groups encontrados***")
         print()
         for x in hostgroups:
             print ("GroupID: {} {} Nome: {}\n".format(x['groupid'],'-', x['name']))
     else:
-        print("***Group não encontrado***")
-print()
-while True:
-    nome_group = input("Pesquise nome de um group não precisa ser completo: ")
-    procurando_groupid(nome_group)
-    print("Deseja incluir \n1 - Pesquise \n2 - Sair")
-    opcao = input()
-    if opcao == "1":
-       NOMEGROUP = input("Digite o nome do grupo: ")
-       zapi.hostgroup.create({
-            "name": NOMEGROUP
-         })
-    break
-    #elif opcao == "3":
-    #    break
-   
-print()
-print()
-GROUP = input("Insira o groupid...: ")
-while True:
-    print("Deseja incluir mais algum grupo? \n1 - Sim \n2 - Nao")
-    opcao = input()
-    if opcao == "1":
-       GROUP2 = input("Insira o groupid...: ")
-    elif opcao == "2":
-        break
-print()
-print('***Listando proxys***')
-print()
+        print("\n***Group não encontrado***")
+
+procurando_groupid()   
+
+grupo = list(map(int,input("\nInsira o groupid(Para inserir mais de um grupo Ex: 4 6)...: ").strip().split()))
+
+print('\n***Listando proxys***')
 idproxy = zapi.proxy.get({
     "output": "extend", 
     "sortfield": "host"
     })
 for x in idproxy:
     print ("ProxyID: {} {} Nome: {}\n".format(x['proxyid'],'-', x['host']))
-print()
-PROXY = input("Digite o proxyid caso não utilize insira 0: ")
-print()
-print("***Tipos de interfaces possíveis: 1 - agent; 2 - SNMP***")
-print()
+PROXY = input("\nDigite o proxyid caso não utilize insira 0: ")
+
+print("***\nTipos de interfaces possíveis: 1 - agent; 2 - SNMP***")
 TYPEID = input("Insira o typeid...: ")
-print()
-DESCRIPTION = input("Deseja inserir alguma descrição? Caso Não deixe em branco: ")
-print()
-print('Aguarde...')
+
+DESCRIPTION = input("\nDeseja inserir alguma descrição? Caso Não deixe em branco: ")
+print('\nAguarde...')
 time.sleep(2)
-print()
 
 info_interfaces = {
     "1": {"type": "agent", "id": "1", "port": "10050"},
     "2": {"type": "SNMP", "id": "2", "port": "161"},
 }
 
-groupids = [GROUP,GROUP2]
+groupids = grupo
 groups = [{"groupid": groupid} for groupid in groupids]
-            
+
 def create_host(nomes, host, ip):
     try:
         create_host = zapi.host.create({
