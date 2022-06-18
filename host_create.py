@@ -119,12 +119,9 @@ def create_host(nomes, host, ip):
     except Exception as err:
         print(f'Falha ao cadastrar {err}')
 
-try:   
- with open('hosts.csv') as file:
+with open('hosts.csv') as file:
     file_csv = csv.reader(file, delimiter=';')
     for [nome, hosts, ipaddress] in file_csv:
         create_host(nomes=nome,host=hosts,ip=ipaddress)
-except ValueError as e:
-    print("Cadastro finalizado")
     
 zapi.logout()
