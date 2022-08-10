@@ -90,7 +90,7 @@ groups = [{"groupid": groupid} for groupid in groupids]
 templateids = template
 templates = [{"templateid": templateid} for templateid in templateids]
 
-def create_host(nomes, host, ip, macros, valores):
+def create_host(nomes, host, ip):
     try:
         create_host = zapi.host.create({
             "groups": groups,
@@ -99,12 +99,6 @@ def create_host(nomes, host, ip, macros, valores):
             "description": DESCRIPTION,
             "templates": templates,
             "proxy_hostid": PROXY,
-            "macros": [
-                {
-                    "macro": macros,
-                    "value": valores
-                }
-            ],
             "interfaces": {
                 "type": info_interfaces[TYPEID]['id'],
                 "main": 1,
@@ -128,6 +122,6 @@ def create_host(nomes, host, ip, macros, valores):
 with open('hosts.csv') as file:
     file_csv = csv.reader(file, delimiter=';')
     for [nome, hosts, ipaddress, mrc, valor] in file_csv:
-        create_host(nomes=nome,host=hosts,ip=ipaddress,macros=mrc,valores=valor)
+        create_host(nomes=nome,host=hosts,ip=ipaddress)
     
 zapi.logout()
