@@ -33,7 +33,7 @@ def procurando_templates():
         print("\n***Templates não encontrado***")
 procurando_templates()
 #Variavel armazena o id do template
-template = list(map(int,input("\n(Para inserir mais de um template insira separado por espaço Ex: 10001 10277)\nInsira o templateid...: ").strip().split()))
+template = list(map(int,input("\n(Para inserir mais de um template insira separado por espaço Ex: 10001 10277)\nInsira o templateid (Caso não deixe em branco)...: ").strip().split()))
 
 while True:
     print("\nDeseja criar um grupo de host? \n1 - Sim \n2 - Não")
@@ -121,7 +121,7 @@ def create_host(nomes, host, ip):
 
 with open('hosts.csv') as file:
     file_csv = csv.reader(file, delimiter=';')
-    for [nome, hosts, ipaddress, mrc, valor] in file_csv:
+    for [nome, hosts, ipaddress] in file_csv:
         create_host(nomes=nome,host=hosts,ip=ipaddress)
     
 zapi.logout()
